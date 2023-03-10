@@ -1,0 +1,45 @@
+{
+	"folders": [
+		{
+			"name": "ROOT",
+			"path": "../"
+		},
+		{
+			"name": "🖥️ auth-example",
+			"path": "../apps/auth-example"
+		},
+		{
+			"name": "🖥️ docs",
+			"path": "../apps/docs"
+		},
+		{
+			"name": "🖥️ sandbox",
+			"path": "../apps/sandbox"
+		},
+		{
+			"name": "🖥️ web",
+			"path": "../apps/web"
+		},
+		{
+			"name": "📦 eslint-config-custom",
+			"path": "../packages/eslint-config-custom"
+		},
+		{
+			"name": "📦 ui",
+			"path": "../packages/ui"
+		}
+	],
+
+	"settings": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"[prisma]": {
+			"editor.defaultFormatter": "Prisma.prisma"
+		},
+		"[typescript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		},
+		"[svelte]": {
+			"editor.defaultFormatter": "svelte.svelte-vscode"
+		}
+	}
+}
