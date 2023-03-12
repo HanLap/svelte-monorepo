@@ -1,134 +1,57 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
 	import { signIn, signOut } from '@auth/sveltekit/client';
-	import { Avatar } from 'flowbite-svelte';
+	import type { User } from '@prisma/client';
+	import {
+		Avatar,
+		Button,
+		Dropdown,
+		DropdownDivider,
+		DropdownHeader,
+		DropdownItem,
+		Navbar,
+		NavBrand,
+		NavHamburger,
+		NavLi,
+		NavUl
+	} from 'flowbite-svelte';
 
+	$: current = (path: string) => $page.url.pathname === path;
+
+	$: session  = $page.data.session as unknown as { user: User} | undefined;
 </script>
 
-<header>
-	<div class="corner">
-		<a href="https://kit.svelte.dev">
-			<img src={logo} alt="SvelteKit" />
-		</a>
-	</div>
-
-	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
-		<ul>
-			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/posts' ? 'page' : undefined}>
-				<a href="/posts">Posts</a>
-			</li>
-			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-				<a href="/sverdle">Sverdle</a>
-			</li>
-		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
-	</nav>
-
-	<div class="flex space-x-2 items-center mr-2">
-		{#if $page.data.session}
-			<Avatar src={$page.data.session.user?.image ?? undefined}  size="sm"/>
-			<button on:click={() => signOut()}>Sign out</button>
+<Navbar let:hidden let:toggle color="none">
+	<NavBrand href="/">
+		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+			Sveltter
+		</span>
+	</NavBrand>
+	<div class="flex md:order-2 items-center space-x-1">
+		{#if session}
+			<Avatar id="avatar-menu" src={session.user?.image ?? undefined} size="sm" />
 		{:else}
-			<button class="buttonPrimary" on:click={() => signIn('github')}>Sign in</button>
+			<Button pill gradient color="purpleToPink" on:click={() => signIn('github')} size="sm"
+				>Sign in</Button
+			>
 		{/if}
+		<NavHamburger on:click={toggle} />
 	</div>
-</header>
-
-<style>
-	header {
-		display: flex;
-		justify-content: space-between;
-	}
-
-	.corner {
-		width: 3em;
-		height: 3em;
-	}
-
-	.corner a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-	}
-
-	.corner img {
-		width: 2em;
-		height: 2em;
-		object-fit: contain;
-	}
-
-	nav {
-		display: flex;
-		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
-	}
-
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
-	}
-
-	path {
-		fill: var(--background);
-	}
-
-	ul {
-		position: relative;
-		padding: 0;
-		margin: 0;
-		height: 3em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		list-style: none;
-		background: var(--background);
-		background-size: contain;
-	}
-
-	li {
-		position: relative;
-		height: 100%;
-	}
-
-	li[aria-current='page']::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--color-theme-1);
-	}
-
-	nav a {
-		display: flex;
-		height: 100%;
-		align-items: center;
-		padding: 0 0.5rem;
-		color: var(--color-text);
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		text-decoration: none;
-		transition: color 0.2s linear;
-	}
-
-	a:hover {
-		color: var(--color-theme-1);
-	}
-</style>
+	{#if session}
+		<Dropdown placement="bottom" triggeredBy="#avatar-menu">
+			<DropdownHeader>
+				<span class="block text-sm"> {session.user?.name} </span>
+				<span class="block truncate text-sm font-medium"> {session.user?.email} </span>
+			</DropdownHeader>
+			<DropdownItem href="/user/{session.user.username}">Dashboard</DropdownItem>
+			<DropdownItem href="/settings">Settings</DropdownItem>
+			<DropdownDivider />
+			<DropdownItem on:click={() => signOut()}>Sign out</DropdownItem>
+		</Dropdown>
+	{/if}
+	<NavUl {hidden} class="order-1">
+		<NavLi href="/" active={current('/')}>Home</NavLi>
+		<NavLi href="/posts" active={current('/posts')}>Posts</NavLi>
+		<NavLi href="/about" active={current('/about')}>About</NavLi>
+	</NavUl>
+</Navbar>

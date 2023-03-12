@@ -4,19 +4,23 @@
 </script>
 
 <form method="POST" use:enhance>
-	<div>
-		<div>
-			<Label for="title">Title</Label>
-			<Input id="title" type="text" name="title" required />
-		</div>
-		<div>
-			<Label for="content">Content</Label>
-			<Textarea id="content" name="content">
-				<div slot="footer" class="flex items-center justify-between">
-					<Button type="submit">Publish post</Button>
-					<Toolbar embedded />
-				</div>
-			</Textarea>
-		</div>
+	<div class="w-96 flex flex-col items-center m-auto">
+		<label for="title" hidden>Title</label>
+		<label for="content" hidden>Content</label>
+		<Textarea id="content" name="content" placeholder="Content...">
+			<Input
+				slot="header"
+				id="title"
+				type="text"
+				name="title"
+				placeholder="Title..."
+				required
+				class="!border-gray-300 border-dashed"
+			/>
+			<div slot="footer" class="flex items-center justify-between">
+				<Button type="submit" color="purpleToPink" gradient>Publish post</Button>
+				<Toolbar embedded />
+			</div>
+		</Textarea>
 	</div>
 </form>

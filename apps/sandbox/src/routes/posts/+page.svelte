@@ -1,38 +1,24 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import NewPost from './NewPost.svelte';
-	import Post from './Post.svelte';
+	import Post from '$lib/components/Post.svelte';
 
 	export let data;
-	export let form;
 
-	$: ({ user, posts } = data);
+	$: ({ posts } = data);
 </script>
 
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
+	<title>Sveltter | Posts</title>
+	<meta name="description" content="Sveltter Post page" />
 </svelte:head>
 
-{#if form?.incorrect}
-	<p>User does not exist!</p>
+{#if $page.data.session}
+	<NewPost />
 {/if}
 
-<div>
-	{#if user}
-		{@const { id, name, email } = user}
-		<div>
-			<span>{id}</span>
-			<span>{name}</span>
-			<span>{email}</span>
-		</div>
-	{/if}
-</div>
-
-<h2 class="text-3xl font-bold text-zinc-700">new Post</h2>
-<NewPost />
-
 <h2 class="text-3xl font-bold text-zinc-700">Posts</h2>
-<div>
+<div class="flex flex-col space-y-2 m-5">
 	{#each posts as post}
 		<Post {post} />
 	{/each}
