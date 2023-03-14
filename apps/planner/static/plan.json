@@ -1,0 +1,43 @@
+{
+  "start": 10,
+  "end": 41,
+  "tasks": [
+    {
+      "id": 849931,
+      "name": "Recherche",
+      "plannedStart": 14,
+      "plannedEnd": 4
+    },
+    {
+      "id": 47386,
+      "name": "Erhebung Requirements",
+      "plannedStart": 18,
+      "plannedEnd": 2
+    },
+    {
+      "id": 74216,
+      "name": "Evaluation Requirements",
+      "plannedStart": 20,
+      "plannedEnd": 1
+    },
+    {
+      "id": 470125,
+      "name": "Implementation",
+      "plannedStart": 21,
+      "plannedEnd": 8
+    },
+    {
+      "id": 294380,
+      "name": "Evaluation Implementation",
+      "plannedStart": 29,
+      "plannedEnd": 2
+    },
+    {
+      "id": 771729,
+      "name": "Schreiben",
+      "plannedStart": 31,
+      "plannedEnd": 8
+    }
+  ],
+  "deadline": "2023-10-15T00:00:00.000Z"
+}

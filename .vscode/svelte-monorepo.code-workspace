@@ -13,6 +13,10 @@
 			"path": "../apps/docs"
 		},
 		{
+			"name": "🖥️ planner",
+			"path": "../apps/planner"
+		},
+		{
 			"name": "🖥️ sandbox",
 			"path": "../apps/sandbox"
 		},
@@ -32,6 +36,7 @@
 
 	"settings": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"css.lint.unknownAtRules": "ignore",
 		"[prisma]": {
 			"editor.defaultFormatter": "Prisma.prisma"
 		},
