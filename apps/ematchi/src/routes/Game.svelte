@@ -105,6 +105,7 @@
 
 				if (found.length === (size * size) / 2) {
 					dispatch('win');
+					playing = false;
 				}
 			}}
 			{found}

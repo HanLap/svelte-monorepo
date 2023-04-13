@@ -1,4 +1,11 @@
-<div class="modal-background">
+<script>
+
+	import { fade } from "svelte/transition";
+
+</script>
+
+
+<div class="modal-background" transition:fade>
 	<div class="modal">
 		<slot />
 	</div>

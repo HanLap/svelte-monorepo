@@ -7,6 +7,44 @@
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
+		<script>
+			function userPrefersDark() {
+				const darkmode = localStorage.getItem('darkmode');
+
+				console.log(darkmode);
+
+				if (darkmode !== undefined && darkmode !== null) {
+					return darkmode === 'true';
+				}
+
+				if (window.matchMedia) {
+					return window.matchMedia('(prefers-color-scheme: dark)').matches;
+				}
+			}
+
+			function toggleDarkmode(state) {
+				if (state !== undefined) {
+					window.document.body.classList.toggle('darkmode');
+					return;
+				}
+
+				window.document.body.classList.toggle('darkmode', state);
+			}
+
+			if (userPrefersDark()) {
+				toggleDarkmode(true);
+			}
+
+			function listenDarkmode(e) {
+				toggleDarkmode(e.matches);
+			}
+
+			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listenDarkmode);
+
+			setTimeout(() => {
+				window.document.body.classList.add('transition');
+			}, 100);
+		</script>
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
