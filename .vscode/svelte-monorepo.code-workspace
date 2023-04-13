@@ -13,6 +13,10 @@
 			"path": "../apps/docs"
 		},
 		{
+			"name": "🖥️ ematchi",
+			"path": "../apps/ematchi"
+		},
+		{
 			"name": "🖥️ planner",
 			"path": "../apps/planner"
 		},
@@ -41,10 +45,12 @@
 			"editor.defaultFormatter": "Prisma.prisma"
 		},
 		"[typescript]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
+			"editor.defaultFormatter": "esbenp.prettier-vscode",
+			"editor.rulers": [100]
 		},
 		"[svelte]": {
-			"editor.defaultFormatter": "svelte.svelte-vscode"
+			"editor.defaultFormatter": "svelte.svelte-vscode",
+			"editor.rulers": [100]
 		}
 	}
 }
