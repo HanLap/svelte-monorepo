@@ -14,24 +14,6 @@
 		window.document.body.classList.toggle('darkmode');
 		localStorage.setItem('darkmode', (localStorage.getItem('darkmode') !== 'true') + '');
 	}
-
-	// onMount(() => {
-	// 	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-	// 		toggleDarkMode(true);
-	// 	}
-
-	// 	function listenDarkmode(e: any) {
-	// 		toggleDarkMode(e.matches);
-	// 	}
-
-	// 	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listenDarkmode);
-
-	// 	return () => {
-	// 		window
-	// 			.matchMedia('(prefers-color-scheme: dark)')
-	// 			.removeEventListener('change', listenDarkmode);
-	// 	};
-	// });
 </script>
 
 <svelte:head>
