@@ -3,10 +3,18 @@
   "end": 41,
   "tasks": [
     {
+      "id": 874804,
+      "name": "Abstract",
+      "plannedStart": 14,
+      "plannedEnd": 1,
+      "actualStart": 14
+    },
+    {
       "id": 849931,
       "name": "Recherche",
       "plannedStart": 14,
-      "plannedEnd": 4
+      "plannedEnd": 4,
+      "actualStart": 14
     },
     {
       "id": 47386,

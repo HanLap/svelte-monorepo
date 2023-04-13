@@ -1,4 +1,6 @@
 import { SAVE_FILE, STATIC } from '$env/static/private';
+import type { Plan } from '$lib/models/Plan';
+import { TaskSchema, type Task } from '$lib/models/Task';
 import { fail } from '@sveltejs/kit';
 import fs from 'fs/promises';
 import { z } from 'zod';
@@ -6,30 +8,13 @@ import { zfd } from 'zod-form-data';
 
 const isStatic = STATIC === 'true';
 
-const TaskSchema = z.object({
-	id: zfd.numeric(z.number()),
-	name: z.string(),
-	plannedStart: zfd.numeric(z.number()),
-	plannedEnd: zfd.numeric(z.number()),
-	actualStart: zfd.numeric(z.number().optional()),
-	actualEnd: zfd.numeric(z.number().optional()),
-});
 const FormSchema = zfd.formData({
 	tasks: z.array(TaskSchema),
 });
 
-type Task = z.infer<typeof TaskSchema>;
-
-type Plan = {
-	start: number;
-	end: number;
-	tasks: Task[];
-	deadline?: string;
-};
-
 async function loadPlan(fetchs?: typeof fetch): Promise<Plan> {
 	if (isStatic && fetchs) {
-		const res = await fetchs("/plan.json");
+		const res = await fetchs('/plan.json');
 		return res.json();
 	}
 
@@ -63,7 +48,7 @@ async function savePlan(plan: Plan) {
 	return fs.writeFile(SAVE_FILE, JSON.stringify(plan, undefined, 2));
 }
 
-export async function load({fetch}) {
+export async function load({ fetch }) {
 	const plan = await loadPlan(fetch);
 
 	return {

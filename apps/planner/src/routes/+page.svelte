@@ -3,7 +3,9 @@
 	import { debounce } from '$lib/debounce';
 	import { dndzone } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
+	import { scale, slide } from 'svelte/transition';
 	import { daysBetween, getCalendarWeek } from '../lib/dateUtil';
+	import { getTaskSteps } from '$lib/taskUtil';
 
 	export let data;
 
@@ -108,7 +110,11 @@
 		>
 			{#each plan.tasks as task, i (task.id)}
 				{@const idPrefix = `tasks[${i}]`}
-				<tr class="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100" animate:flip>
+				<tr
+					class="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100"
+					animate:flip={{ duration: 200 }}
+					in:scale
+				>
 					<input name="{idPrefix}.id" hidden value={task.id} />
 					<td>
 						<button class="mx-1 text-red-800" formaction="?/deleteTask&id={task.id}">x</button>
@@ -148,21 +154,13 @@
 							bind:value={task.actualEnd}
 						/>
 					</td>
-					{#each Array.from({ length: plan.end - plan.start + 1 }, (_, i) => i + plan.start) as i}
-						{@const isPlanned = i >= task.plannedStart && i < task.plannedStart + task.plannedEnd}
-						{@const isGood = task.actualStart && i >= task.actualStart && i < task.plannedStart}
-						{@const isBad =
-							task.actualStart &&
-							task.actualEnd &&
-							i >= task.plannedStart + task.plannedEnd &&
-							i < task.actualStart + task.actualEnd}
-						{@const isWeek = i === currentWeek}
+					{#each getTaskSteps(task, currentWeek, plan.start, plan.end) as step}
 						<td
 							class="{cellStyle} font-semibold"
-							class:isPlanned
-							class:isGood
-							class:isBad
-							class:isWeek
+							colspan={step.weeks}
+							class:isGood={step.type === 'EARLY'}
+							class:isPlanned={step.type === 'EXPECTED'}
+							class:isBad={step.type === 'LATE'}
 						/>
 					{/each}
 				</tr>
@@ -196,6 +194,6 @@
 	}
 
 	td.isPlanned {
-		@apply bg-green-300;
+		@apply bg-gradient-to-r from-green-200 to-green-300;
 	}
 </style>
