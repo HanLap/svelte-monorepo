@@ -10,33 +10,33 @@
 
 	let game: Game;
 
-	function toggleDarkMode(state?: boolean) {
-		if (state !== undefined) {
-			window.document.body.classList.toggle('darkmode');
-			return;
-		}
-
-		window.document.body.classList.toggle('darkmode', state);
+	function toggleDarkMode() {
+		window.document.body.classList.toggle('darkmode');
+		localStorage.setItem('darkmode', (localStorage.getItem('darkmode') !== 'true') + '');
 	}
 
-	onMount(() => {
-		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			toggleDarkMode(true);
-		}
+	// onMount(() => {
+	// 	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+	// 		toggleDarkMode(true);
+	// 	}
 
-		function listenDarkmode(e: any) {
-			toggleDarkMode(e.matches);
-		}
+	// 	function listenDarkmode(e: any) {
+	// 		toggleDarkMode(e.matches);
+	// 	}
 
-		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listenDarkmode);
+	// 	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', listenDarkmode);
 
-		return () => {
-			window
-				.matchMedia('(prefers-color-scheme: dark)')
-				.removeEventListener('change', listenDarkmode);
-		};
-	});
+	// 	return () => {
+	// 		window
+	// 			.matchMedia('(prefers-color-scheme: dark)')
+	// 			.removeEventListener('change', listenDarkmode);
+	// 	};
+	// });
 </script>
+
+<svelte:head>
+	<title>ematchi</title>
+</svelte:head>
 
 <button class="darkmode-toggle" on:click={() => toggleDarkMode()}>
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -50,6 +50,7 @@
 
 <Game
 	bind:this={game}
+	on:play={() => (state = 'playing')}
 	on:win={() => (state = 'won')}
 	on:lose={() => (state = 'lost')}
 	on:pause={() => (state = 'paused')}
@@ -61,7 +62,7 @@
 		class="confetti"
 		use:confetti={{
 			stageWidth: innerWidth,
-			stageHeight: innerHeight
+			stageHeight: innerHeight,
 		}}
 	/>
 {/if}
@@ -84,30 +85,11 @@
 
 			<div class="buttons">
 				{#if state === 'paused'}
-					<button
-						on:click={() => {
-							game.resume();
-							state = 'playing';
-						}}
-					>
-						resume
-					</button>
-					<button
-						on:click={() => {
-							game.stop();
-							state = 'waiting';
-						}}
-					>
-						quit
-					</button>
+					<button on:click={() => game.resume()}> resume </button>
+					<button on:click={() => game.stop()}> quit </button>
 				{:else}
 					{#each levels as level}
-						<button
-							on:click={() => {
-								game.start(level);
-								state = 'playing';
-							}}
-						>
+						<button on:click={() => game.start(level)}>
 							{level.label}
 						</button>
 					{/each}

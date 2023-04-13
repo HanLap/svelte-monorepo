@@ -26,7 +26,7 @@
 		justify-content: center;
 		align-items: center;
 		transform-style: preserve-3d;
-		transition: transform 0.4s;
+		transition: transform 0.4s, opacity 0.4s;
 		transform: rotateY(0deg);
 	}
 
