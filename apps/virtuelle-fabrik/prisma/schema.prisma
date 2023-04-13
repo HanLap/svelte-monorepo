@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Szenario {
+  id             Int              @id @default(autoincrement())
+  name           String
+  Arbeitsschritt Arbeitsschritt[]
+  Maschine       Maschine[]
+  Material       Material[]
+  Produkt        Produkt[]
+  Charge         Charge[]
+}
+
+model Arbeitsschritt {
+  id                     String                   @id @default(uuid())
+  name                   String
+  MaschinenBefaehigung   Maschinenbefaehigung[]
+  Produktionsschritt     Produktionsschritt[]
+  szenario               Szenario                 @relation(fields: [szenarioId], references: [id])
+  szenarioId             Int
+  Mitarbeiterbefaehigung Mitarbeiterbefaehigung[]
+}
+
+model Charge {
+  id            String          @id @default(uuid())
+  name          String
+  prioritaet    Int
+  produktbedarf Produktbedarf[]
+  szenario      Szenario        @relation(fields: [szenarioId], references: [id])
+  szenarioId    Int
+}
+
+model Maschine {
+  id                        String                 @id @default(uuid())
+  name                      String
+  ruestzeit                 Int
+  kostenMinute              Int
+  ausfallWahrscheinlichkeit Int
+  mitarbeiterMin            Int
+  mitarbeiterMax            Int
+  befaehigungen             Maschinenbefaehigung[]
+  szenario                  Szenario               @relation(fields: [szenarioId], references: [id])
+  szenarioId                Int
+}
+
+model Maschinenbefaehigung {
+  schritt    Arbeitsschritt @relation(fields: [schrittId], references: [id])
+  schrittId  String
+  taktrate   Int
+  Maschine   Maschine       @relation(fields: [maschineId], references: [id])
+  maschineId String
+
+  @@id([schrittId, maschineId])
+}
+
+model Material {
+  id             String           @id @default(uuid())
+  name           String
+  kostenStueck   Int
+  MaterialBedarf Materialbedarf[]
+  szenario       Szenario         @relation(fields: [szenarioId], references: [id])
+  szenarioId     Int
+}
+
+model Materialbedarf {
+  Material   Material @relation(fields: [materialId], references: [id])
+  materialId String
+  Produkt    Produkt  @relation(fields: [produktId], references: [id])
+  produktId  String
+
+  @@id([materialId, produktId])
+}
+
+model Mitarbeiter {
+  id                     String                   @id @default(uuid())
+  name                   String
+  wechselzeit            Int
+  mitarbeiterbefaehigung Mitarbeiterbefaehigung[]
+}
+
+model Mitarbeiterbefaehigung {
+  arbeitsschritt Arbeitsschritt @relation(fields: [schrittId], references: [id])
+  schrittId      String
+  Mitarbeiter    Mitarbeiter    @relation(fields: [mitarbeiterId], references: [id])
+  mitarbeiterId  String
+  taktrate       Int
+
+  @@id([schrittId, mitarbeiterId])
+}
+
+model Produkt {
+  id                  String               @id @default(uuid())
+  name                String
+  verkaufspreis       String
+  produktionsSchritte Produktionsschritt[]
+  MaterialBedarf      Materialbedarf[]
+  szenario            Szenario             @relation(fields: [szenarioId], references: [id])
+  szenarioId          Int
+  Produktbedarf       Produktbedarf[]
+}
+
+model Produktbedarf {
+  produkt    Produkt @relation(fields: [produktId], references: [id])
+  produktId  String
+  charge     Charge  @relation(fields: [chargeId], references: [id])
+  chargeId   String
+  stueckzahl Int
+
+  @@id([produktId, chargeId])
+}
+
+model Produktionsschritt {
+  schritt   Arbeitsschritt @relation(fields: [schrittId], references: [id])
+  schrittId String
+  Produkt   Produkt        @relation(fields: [produktId], references: [id])
+  produktId String
+  nummer    Int
+
+  @@id([schrittId, produktId])
+}

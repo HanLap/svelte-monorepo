@@ -25,6 +25,10 @@
 			"path": "../apps/sandbox"
 		},
 		{
+			"name": "🖥️ virtuelle fabrik",
+			"path": "../apps/virtuelle-fabrik"
+		},
+		{
 			"name": "🖥️ web",
 			"path": "../apps/web"
 		},
