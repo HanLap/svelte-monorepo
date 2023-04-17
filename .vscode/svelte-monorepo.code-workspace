@@ -25,6 +25,10 @@
 			"path": "../apps/sandbox"
 		},
 		{
+			"name": "🖥️ svelteflix",
+			"path": "../apps/svelteflix"
+		},
+		{
 			"name": "🖥️ web",
 			"path": "../apps/web"
 		},
