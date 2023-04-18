@@ -5,6 +5,8 @@
 	import tmdb from '$lib/images/tmdb.svg';
 
 	export let data;
+
+	$: console.log(data);
 </script>
 
 <nav class="column">
