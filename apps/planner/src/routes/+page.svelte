@@ -3,7 +3,9 @@
 	import { debounce } from '$lib/debounce';
 	import { dndzone } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
+	import { scale } from 'svelte/transition';
 	import { daysBetween, getCalendarWeek } from '../lib/dateUtil';
+	import Row from './Row.svelte';
 
 	export let data;
 
@@ -101,70 +103,18 @@
 			{/each}
 		</thead>
 		<tbody
-			use:dndzone={{ items: plan.tasks }}
+			use:dndzone={{ items: plan.tasks, morphDisabled: true }}
 			on:consider={handleDndConsider}
 			on:finalize={handleDndFinalize}
 			class="border border-gray-400"
 		>
 			{#each plan.tasks as task, i (task.id)}
-				{@const idPrefix = `tasks[${i}]`}
-				<tr class="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100" animate:flip>
-					<input name="{idPrefix}.id" hidden value={task.id} />
-					<td>
-						<button class="mx-1 text-red-800" formaction="?/deleteTask&id={task.id}">x</button>
-					</td>
-					<td class="{cellStyle} w-48 min-w-min">
-						<input name="{idPrefix}.name" class="w-48 px-1 bg-transparent" bind:value={task.name} />
-					</td>
-					<td class={cellStyle}>
-						<input
-							name="{idPrefix}.plannedStart"
-							class="w-10 text-right px-1 bg-transparent"
-							type="number"
-							bind:value={task.plannedStart}
-						/>
-					</td>
-					<td class={cellStyle}>
-						<input
-							name="{idPrefix}.plannedEnd"
-							class="w-10 text-right px-1 bg-transparent"
-							type="number"
-							bind:value={task.plannedEnd}
-						/>
-					</td>
-					<td class={cellStyle}>
-						<input
-							name="{idPrefix}.actualStart"
-							class="w-10 text-right px-1 bg-transparent"
-							type="number"
-							bind:value={task.actualStart}
-						/>
-					</td>
-					<td class="{cellStyle} border-r">
-						<input
-							name="{idPrefix}.actualEnd"
-							class="w-10 text-right px-1 bg-transparent"
-							type="number"
-							bind:value={task.actualEnd}
-						/>
-					</td>
-					{#each Array.from({ length: plan.end - plan.start + 1 }, (_, i) => i + plan.start) as i}
-						{@const isPlanned = i >= task.plannedStart && i < task.plannedStart + task.plannedEnd}
-						{@const isGood = task.actualStart && i >= task.actualStart && i < task.plannedStart}
-						{@const isBad =
-							task.actualStart &&
-							task.actualEnd &&
-							i >= task.plannedStart + task.plannedEnd &&
-							i < task.actualStart + task.actualEnd}
-						{@const isWeek = i === currentWeek}
-						<td
-							class="{cellStyle} font-semibold"
-							class:isPlanned
-							class:isGood
-							class:isBad
-							class:isWeek
-						/>
-					{/each}
+				<tr
+					class="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100"
+					animate:flip={{ duration: 200 }}
+					in:scale
+				>
+					<Row {task} {i} {currentWeek} {plan} />
 				</tr>
 			{/each}
 		</tbody>
@@ -182,20 +132,11 @@
 		@apply border-r;
 	}
 
-	td.isWeek,
 	th.isWeek {
 		@apply border-x-2 border-yellow-600 bg-yellow-300;
 	}
 
-	td.isGood {
-		@apply bg-green-100;
-	}
-
-	td.isBad {
-		@apply bg-orange-200;
-	}
-
-	td.isPlanned {
-		@apply bg-green-300;
+	tr:hover :global(td.deleteButton) {
+		@apply opacity-100;
 	}
 </style>
