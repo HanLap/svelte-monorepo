@@ -12,9 +12,9 @@ const FormSchema = zfd.formData({
 	tasks: z.array(TaskSchema),
 });
 
-async function loadPlan(fetchs?: typeof fetch): Promise<Plan> {
-	if (isStatic && fetchs) {
-		const res = await fetchs('/plan.json');
+async function loadPlan(fetcher?: typeof fetch): Promise<Plan> {
+	if (isStatic && fetcher) {
+		const res = await fetcher('/plan.json');
 		return res.json();
 	}
 

@@ -44,16 +44,17 @@ export function getTaskSteps(
 				weeks: task.actualEnd - task.plannedEnd,
 			});
 		}
-	} else if (calendarWeek >= (task.plannedStart + task.plannedEnd)) {
+	} else if (calendarWeek >= task.plannedStart + task.plannedEnd) {
 		taskSteps.push({
 			type: 'LATE',
-			weeks: calendarWeek - (task.plannedStart + task.plannedEnd),
+			weeks: calendarWeek - (task.plannedStart + task.plannedEnd - 1),
 		});
+
 	}
 
 	taskSteps.push({
 		type: 'NONE',
-		weeks: planEnd - task.plannedStart - task.plannedEnd,
+		weeks: planEnd - task.plannedStart - task.plannedEnd + 1,
 	});
 
 	return taskSteps;
