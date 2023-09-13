@@ -5,7 +5,6 @@ import { fail } from '@sveltejs/kit';
 export async function load({ parent }) {
 	const session = (await parent()).session;
 
-
 	return {
 		posts: await getPosts(session?.user ?? undefined),
 	};

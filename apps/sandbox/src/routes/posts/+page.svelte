@@ -2,10 +2,22 @@
 	import { page } from '$app/stores';
 	import NewPost from './NewPost.svelte';
 	import Post from '$lib/components/Post.svelte';
+	import { onNavigate } from '$app/navigation';
 
 	export let data;
 
 	$: ({ posts } = data);
+
+	onNavigate((navigation) => {
+    if (!document.startViewTransition) return;
+
+    return new Promise((resolve) => {
+        document.startViewTransition(async () => {
+            resolve();
+            await navigation.complete;
+        });
+    });
+	})
 </script>
 
 <svelte:head>

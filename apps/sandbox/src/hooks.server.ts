@@ -3,6 +3,7 @@ import GitHub from '@auth/core/providers/github';
 import { GITHUB_ID, GITHUB_SECRET } from '$env/static/private';
 import { createUser, getOrCreateUser } from '$lib/server/userService';
 import { error, type Handle } from '@sveltejs/kit';
+import type { Provider } from '@auth/core/providers';
 
 export const handle = SvelteKitAuth({
 	providers: [
@@ -10,15 +11,24 @@ export const handle = SvelteKitAuth({
 			clientId: GITHUB_ID,
 			clientSecret: GITHUB_SECRET,
 		}),
-	],
+	] as Provider[],
 	callbacks: {
-		async signIn({ user }) {
-			const { email, name, image } = user;
-			if (!email) {
+		async signIn(event) {
+			const { user, profile } = event;
+
+			if (user) {
+				return true;
+			}
+
+			if (!profile || !profile.email) {
 				return false;
 			}
 
-			await createUser({ email, name, image });
+			await createUser({
+				email: profile.email,
+				name: profile.name,
+				image: profile.avatar_url as string,
+			});
 
 			return true;
 		},

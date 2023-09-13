@@ -14,7 +14,7 @@
 	$: liked = post.liked_by.length > 0;
 </script>
 
-<Card>
+<Card class="viewTransition" style="view-transition-name: post-{post.id}">
 	<h3 class="text-xl font-bold">{post.title}</h3>
 	<div class="flex space-x-1 items-center mb-2 justify-between">
 		<a class="flex items-center space-x-1 hover:underline" href="/user/{post.author.username}">
@@ -53,4 +53,9 @@
 	:global(.iconButton) {
 		@apply text-center font-medium inline-flex items-center justify-center px-3 py-2 text-xs text-blue-700 border border-blue-700 border-transparent;
 	}
+
+	:global(.viewTransition) {
+		view-transition-name: post;
+	}
+
 </style>

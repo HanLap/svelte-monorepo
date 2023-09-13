@@ -1,9 +1,20 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { Alert, Textarea, ToolbarButton } from 'flowbite-svelte';
 	import { FaceSmile, Icon, PaperAirplane } from 'svelte-hero-icons';
+
+	let formRef: HTMLFormElement;
+
+	function handleKeyPress(e: KeyboardEvent) {
+		console.log(e.ctrlKey, e.code)
+
+		if (e.ctrlKey && e.code === 'Enter') {
+			formRef.requestSubmit();
+		}
+	}
 </script>
 
-<form method="POST" action="?/comment">
+<form bind:this={formRef} method="POST" action="?/comment" use:enhance>
 	<label for="chat" class="sr-only">Your message</label>
 	<Alert color="dark" class="px-3 py-2 shadow">
 		<svelte:fragment slot="icon">
@@ -11,7 +22,7 @@
 				<Icon src={FaceSmile} size="20" />
 				<span class="sr-only">Add emoji</span>
 			</ToolbarButton>
-			<Textarea id="chat" name="content" class="mx-4" rows="1" placeholder="Your comment..." />
+			<Textarea id="chat" name="content" class="mx-4" rows="1" placeholder="Your comment..." on:keypress={handleKeyPress} />
 			<ToolbarButton
 				type="submit"
 				color="blue"

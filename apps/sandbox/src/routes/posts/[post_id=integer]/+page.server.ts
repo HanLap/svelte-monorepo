@@ -1,7 +1,7 @@
 import { createComment, getComments } from '$lib/server/commentService';
 import { getPost, likePost, unlikePost } from '$lib/server/postService';
 import { getOrCreateUser, getUser } from '$lib/server/userService';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 
 export async function load({ params, parent }) {
 	const session = (await parent()).session;
